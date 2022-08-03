@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: black
+    }
+
+    .container {
+        width: 600px;
+        height: 600px;
+        margin: 10px auto;
+        display: grid;
+        grid-template-columns: repeat(30, 1fr);
+        gap: 5px;
+
+    }
+
+    .item {
+        width: 15px;
+        height: 15px;
+        background-color: gray;
+    }
+</style>
+
+<body>
+    <!--小方块阵列-->
+    <div class="container" id="container"></div>
+    <script>
+        let container = document.querySelector('.container');
+        let colors = ["red", "orange", "yellow", "green", "pink", "blue", "purple"];
+        //生成一个小方块阵列，并且给每个小方块绑定鼠标移入和移出事件
+        function generateSuare() {
+            //your complement
+            for (let i = 0; i < 900; i++) {
+                let item = document.createElement("div")
+                item.classList.add('item');
+                container.append(item);
+            }
+        }
+        generateSuare();
+
+        //这个函数实现设置小方块颜色，并且绑定到鼠标移入事件
+        function setColor(element) {
+            let num = Math.floor(Math.random() * 7);
+            let color = colors[num];
+            element.style.backgroundColor = color;
+        }
+
+        //这个函数实现去除小方块颜色，并且绑定到鼠标移出事件
+        function deleteColor(element) {
+            //your complement
+            element.style.backgroundColor = "gray ";
+        }
+
+        container.addEventListener('mouseover', function (event) {
+            let target = event.target;
+            // console.log(target.className);
+            if (target.className == 'item') {
+                setColor(target);
+            }
+
+        })
+        container.addEventListener('mouseout', function (event) {
+            let target = event.target;
+            console.log(target)
+            if (target.className == 'item') {
+                setTimeout(() => {
+                    deleteColor(target);
+                }, 500);
+            }
+
+
+        })
+    </script>
+
+</body>
+
+</html>
