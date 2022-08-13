@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        .wrapper {
+            margin: 10px auto;
+            width: fit-content;
+            border: 1px solid black;
+
+        }
+
+        input {
+            border: none;
+            outline: none;
+            padding: 10px;
+            width: 250px;
+        }
+
+        ul {
+            display: none;
+            list-style: none;
+            padding: 5px;
+            color: lightgray;
+        }
+
+        ul li {
+            padding: 5px;
+        }
+
+        ul li:hover {
+            background-color: lightgray;
+            color: black;
+        }
+
+        .selected {
+            background-color: lightblue;
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <input id="email-input" type="text">
+        <ul id="email-sug-wrapper" class="email-sug"></ul>
+    </div>
+    <script>
+
+        var postfixList = ['163.com', 'gmail.com', '126.com', 'qq.com', '263.net'];
+        let ul = document.querySelector('#email-sug-wrapper');
+        let input = document.querySelector('input')
+        // input.addEventListener('input', function (event) {
+        //     let user = event.target.value.trim();
+        //     ul.innerHTML = null;
+        //     // console.log(user)
+        //     if (user == '') {
+        //         ul.innerHTML = null
+        //         ul.style.display = '';
+        //         input.style.borderBottom = ''
+
+        //     } else {
+        //         for (let i = 0; i < postfixList.length; i++) {
+        //             let li = document.createElement('li');
+        //             if (user.includes('@')) {
+        //                 li.textContent = user + postfixList[i];
+        //             } else {
+        //                 li.textContent = user + '@' + postfixList[i];
+        //             }
+        //             ul.append(li);
+        //         }
+        //         input.style.borderBottom = '1px solid black'
+        //          ul.style.display = 'block';
+        //     }
+        // })
+
+        window.onload = function () {
+            input.focus()
+        }
+        // input.oninput = function () {
+        //     // 获取用户输入，生成提示框中的提示内容，将提示内容添加到email - sug - wrapper中
+        //     // 控制email - sug - wrapper的显示 / 隐藏状态
+        // }
+        // 监听特殊3个键的键盘事件，这个事件可能就是inputDom的输入监听，也有可能是另外一个，请自己测试后判断
+        // input.oninput = function (event) {
+        //     // 找到当前为选中状态的Li
+        //     // 清除掉它的选中状态
+        // }
+        input.onkeyup = function (event) {
+            console.log(event.keyCode)
+
+            if (event.keyCode != '38' && event.keyCode != '40' && event.keyCode != '13' && event.keyCode != '27') {
+                addRemind();
+                displayToggle();
+            }
+            else {
+                // let li  = resetSelected();
+                let li = document.querySelector('.selected');
+                li.classList.remove('selected');
+                // input.blur();
+                // console.log(li)
+                if (event.keyCode == '38') {
+                    if (li != ul.firstElementChild) {
+                        // console.log(li.previousElementSibling)
+                        li.previousElementSibling.classList.add('selected')
+                    } else {
+                        // 将最后一个Li设为选中
+                        ul.lastElementChild.classList.add('selected')
+                    }
+                }
+                if (event.keyCode == '40') {
+                    if (li != ul.lastElementChild) {
+                        li.nextElementSibling.classList.add('selected')
+                        // console.log(li.nextElementSibling)
+
+                    } else {
+                        // 将第一个Li设为选中
+                        ul.firstElementChild.classList.add('selected')
+                    }
+                }
+
+                if (event.keyCode == '13') {
+                    // 将找到的Li的HTML内容解码后填到input中
+                    // 隐藏提示框
+                    input.value = li.textContent;
+                    hide();
+                }
+
+            }
+            
+            if (event.keyCode == '27') {
+
+                hide();
+                input.select();
+
+            }
+        }
+
+
+        ul.onclick = function (event) {
+            // if 被点击的是不是提示框中的Li节点 {
+            //     获取被点击Li对应的提示内容
+            //     将内容放到input输入框中
+            //     隐藏输入框
+            // }
+            // console.log(event.target.tagName)
+            if (event.target.tagName == 'LI') {
+                // console.log(event.target.tagName)
+                input.value = event.target.textContent;
+                hide();
+                input.focus()
+            }
+        }
+
+
+
+        function resetSelected() {
+            let li = document.querySelector('.selected');
+
+            if (li != ul.firstElementChild) {
+                // 清除掉它的选中状态
+                // 设置第一个Li为选中状态
+                li.classList.remove('selected');
+                ul.firstElementChild.classList.add('selected');
+            }
+            return li;
+        }
+
+        // 拿到input输入框的输入内容trim后返回
+        function getInput() {
+            let inputStr = input.value.trim();
+            return inputStr;
+        }
+
+        function showRemind() {
+            let inputStr = getInput();
+            let liArr = [];
+            let curIndex = inputStr.indexOf("@");
+            let curStrLen = "";
+            // 判断是否输入了@
+            if (curIndex != -1) {
+                curStrLen = inputStr.slice(curIndex + 1);//@后面的字符串
+                inputStr = inputStr.slice(0, curIndex);//@前面的字符串
+            }
+            for (let i = 0; i < postfixList.length; i++) {
+                // 把用户输入和每一个postfix进行结合成为每一个Li
+                let element = postfixList[i];
+                if (element.includes(curStrLen)) {
+                    let curStr = inputStr.concat("@" + element);
+                    let li = document.createElement("li");
+                    li.innerText = curStr;
+                    // remind.appendChild(curLi);
+                    liArr.push(li);
+                }
+            }
+            liArr[0].classList.add('selected');
+            // 返回生成的提示内容
+            return liArr;
+        }
+
+        //将提示内容添加到email-sug - wrapper中
+        function addRemind() {
+            // 获取生成提示框中的提示内容
+            // 将内容添加到email - sug - wrapper中
+            let liArr = showRemind();
+            ul.innerHTML = null;
+            for (let i = 0; i < liArr.length; i++) {
+                ul.append(liArr[i])
+            }
+        }
+
+        function displayToggle() {
+            let inputStr = getInput()
+            if (!inputStr) {
+                // 隐藏提示框
+                hide();
+
+            } else {
+                // 显示提示框
+                show();
+
+            }
+        }
+
+        function hide() {
+            // 做具体隐藏提示框的操作
+            ul.style.display = 'none'
+            input.style.borderBottom = '';
+        }
+
+        function show() {
+            // 做具体显示提示框的操作
+            ul.style.display = 'block'
+            input.style.borderBottom = '1px solid black';
+        }
+
+    </script>
+</body>
+
+</html>
