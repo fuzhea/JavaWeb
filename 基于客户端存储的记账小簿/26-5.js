@@ -91,7 +91,7 @@ window.onload = function () {
     list.addEventListener('click', function (event) {
         if (event.target.tagName == 'BUTTON') {
             // console.log(event.target)
-            console.log(localStorage)
+            // console.log(localStorage)
             let li = event.target.parentNode;
             // console.log(li);
             // let liCount = list.childElementCount;
