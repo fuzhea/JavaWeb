@@ -1,0 +1,94 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.wrap {
+    width: fit-content;
+    margin: 100px auto;
+    padding: 50px;
+    background-color: whitesmoke;
+    border-radius: 10px;
+    box-shadow: -2px 2px 10px 2px gray,
+        2px 2px 10px 2px gray;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 50px;
+    position: relative;
+}
+
+table {
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+
+.cell {
+    border: 4px solid black;
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    line-height: 100px;
+    font-family: '微软雅黑';
+    font-style: italic;
+    font-size: 70px;
+    cursor: pointer;
+}
+
+
+table tr:first-child td {
+    border-top: 0;
+}
+
+table tr:last-child td {
+    border-bottom: 0;
+}
+
+table tr td:first-child {
+    border-left: 0;
+}
+
+table tr td:last-child {
+    border-right: 0;
+}
+
+.restart{
+    width: 50%;
+    padding: 5px;
+    border-radius: 10px;
+    align-self: center;
+    cursor: pointer;
+    font-weight: 800;
+    font-size: 20px;
+    
+    
+}
+.restart:hover{
+    color: orangered;
+    outline: 0;
+    border:2px solid red;
+}
+.cell:hover{
+    background-color: lightgray;
+}
+.result{
+    width: 50%;
+    height: 40%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-35%);
+    border: 1px solid black;
+    background-color: orangered;
+    opacity: 0.8;
+    font-size: 40px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.hide{
+    display: none !important;
+}
+
